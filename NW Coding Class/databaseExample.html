@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+ <html>
+        <!DOCTYPE html>
+        <html lang="en">
+        
+        <head>
+         <meta charset="utf-8">
+         <title>Employee Data Management Example</title>
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
+        </head>
+        <!--header-->
+        <h1 class="jumbotron" "bg-dark" "text-white">Employee Data Management</h1>
+        <div class="panel panel-success" "bg-dark" "text-white">
+           <div class="row">
+            <div class="col-md-2">
+
+            </div>
+            <div class="col-sm-8">
+              <br>
+        
+              <!-- This panel will initially be made up of a panel and wells for each of the articles retrieved -->
+              <div class="panel panel-primary">
+        
+                <!-- Panel Heading for the retrieved articles box -->
+                <div class="panel-heading">
+                  <h3 class="panel-title"><strong><i class="fa fa-table"></i>Current Employees</strong></h3>
+                </div>
+                <!-- This main panel will hold each of the resulting articles -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">Employee Name</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">Months Worked</th>
+                        <th scope="col">Monthly Rate ($)</th>
+                        <th scope="col">Total Billed ($)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>    
+                    
+                </table>
+              
+            <div class="col-md-2">
+
+            </div>
+         
+           <div class="panel-body">
+                <div class="col-md-6">
+        
+                   <div class="form-group">
+                           <label for="search">Name</label>
+                           <input type="text" class="form-control" id="name">
+                   </div>
+        
+                   <div class="form-group">
+                           <label for="numberToRetrieve">Role</label>
+                           <input type="text" class="form-control" id="role">
+                   </div>
+        
+                   <div class="form-group">
+                           <label for="startYear">Start Date (DD/MM/YY - ex: 01/01/89)</label>
+                           <input type="text" class="form-control" id="beginDate">
+                   </div>
+        
+                   <div class="form-group">
+                           <label for="endYear">Monthly Rate</label>
+                           <input type="text" class="form-control" id="rate">
+                   </div>
+        
+                   <button class="btn btn-primary" id="submit">Submit</button>
+                </div>
+                 
+                <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script> 
+               <script src="https://code.jquery.com/jquery.js"></script>
+                
+               <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+               <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
+               <script type="text/javascript">
+
+                
+                
+                var config = {
+                    apiKey: "AIzaSyCRJ_umsQ9sE8hJa7RuvSoqURCkwNLeGgE",
+                    authDomain: "countdown-94492.firebaseapp.com",
+                    databaseURL: "https://countdown-94492.firebaseio.com",
+                    projectId: "countdown-94492",
+                    storageBucket: "countdown-94492.appspot.com",
+                    messagingSenderId: "896545289681"
+                };
+                firebase.initializeApp(config);
+                
+
+                var database = firebase.database();
+
+                
+                   
+        
+                  $("#submit").on("click", function(){
+                      event.preventDefault();
+
+                      var name = $("#name").val().trim();
+                      var role = $("#role").val().trim();
+                      var beginDate = $("#beginDate").val().trim();
+                      var monthlyRate = $("#rate").val().trim();
+                      console.log(name);
+
+                      database.ref().push({
+                          name: name,
+                          role: role,
+                          beginDate: beginDate,
+                          monthlyRate: monthlyRate,
+                          dateadded: firebase.database.ServerValue.TIMESTAMP
+                      });
+                    
+                        
+                    });
+
+                    database.ref().on("child_added", function(snapshot) {
+                        console.log(snapshot.val().name);
+                        console.log(snapshot.val().role);
+                        var tRow = $("<tr>");
+
+                        var nameCell = $("<td>").text(snapshot.val().name);
+                        tRow.append(nameCell);
+                        
+                        var roleCell = $("<td>").text(snapshot.val().role);
+                        tRow.append(roleCell);
+
+                        var startDateCell = $("<td>").text(snapshot.val().beginDate);
+                        tRow.append(startDateCell);
+
+                        startDate = moment.unix(beginDate).format("MM/DD/YY");
+                        //now = 
+                        console.log(startDate);
+                        var monthsWorked = $("<td>").append(now - startDate);
+
+                        var monthlyRateCell = $("<td>").text(snapshot.val().monthlyRate);
+                        tRow.append(monthlyRateCell);
+
+
+                        $("tbody").append(tRow);
+                        
+                    });
+                        
+                    
+                    
+                
+                    
+                      
+
+                    
+
+                
+
+           
+        
+        
+               </script>
+        
+        
+        <body>
+</html>
